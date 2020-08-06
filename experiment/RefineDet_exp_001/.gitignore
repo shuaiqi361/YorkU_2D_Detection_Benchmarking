@@ -1,0 +1,5 @@
+events/*
+log/*
+snapshots/*
+live_results/*
+detected_results/*

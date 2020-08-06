@@ -1,0 +1,49 @@
+model:
+  arch: NETNET
+  input_size: [512, 512]
+  test_size: [512, 512]
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+  mixup_beta: 1.5
+  operation_list: flip
+                  random_crop
+
+  box_type: offset
+  return_percent_coords: True
+
+nms:
+  min_score: 0.05
+  max_overlap: 0.5
+  top_k: 500
+
+workers: 2
+batch_size: 6
+reg_loss: IOU
+cls_loss: Focal
+focal_type: sigmoid
+reg_weights: 5
+
+optimizer:
+  type: SGD
+  base_lr: 0.0005
+  min_lr: 0.000001
+  warm_up: False
+  warm_up_steps: 3
+  warm_up_freq: 2000
+
+  max_iter: 1200000
+  momentum: 0.9
+  weight_decay: 0.0001
+
+print_freq: 4000
+val_freq: 15
+eval_overlap: 0.5
+device: 0
+
+data_name: COCO
+
+train_data_root: /home/keyi/research/code/traffic/shape_based_object_detection/data/COCO
+val_data_root: /home/keyi/research/code/traffic/shape_based_object_detection/data/COCO
+
+label_path: /home/keyi/research/code/traffic/shape_based_object_detection/data/COCO/label_map.json
+annotation_file: /home/keyi/research/data/COCO17/annotations/instances_val2017.json
