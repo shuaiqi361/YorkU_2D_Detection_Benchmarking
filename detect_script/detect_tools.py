@@ -109,7 +109,7 @@ def detect(predicted_locs, predicted_scores, min_score, max_overlap, top_k, prio
         n_objects = image_scores.size(0)
 
         if config.final_nms:
-            final_nms_idx = nms(image_boxes, image_scores, 0.8)
+            final_nms_idx = nms(image_boxes, image_scores, 0.7)
             image_scores = image_scores[final_nms_idx]
             image_labels = image_labels[final_nms_idx]
             image_boxes = image_boxes[final_nms_idx, :]
@@ -196,7 +196,7 @@ def detect_focal(predicted_locs, predicted_scores, min_score, max_overlap, top_k
         for c in range(n_classes):  # n_classes = 20 for VOC and 80 for COCO
             # Keep only predicted boxes and scores where scores for this class are above the minimum score
             class_scores = class_scores_all[:, c]
-            top_k_scores, _ = torch.topk(class_scores, min(5000, len(class_scores) - 1), dim=0)
+            top_k_scores, _ = torch.topk(class_scores, min(3500, len(class_scores) - 1), dim=0)
             min_score = max(min_score, top_k_scores.min())
             score_above_min_score = (class_scores >= min_score).long()  # for indexing
 
@@ -212,7 +212,7 @@ def detect_focal(predicted_locs, predicted_scores, min_score, max_overlap, top_k
                                                     index=torch.nonzero(score_above_min_score).squeeze(dim=1))
 
             if reg_type.lower() == 'iou':
-                anchor_nms_idx, _ = diounms(class_decoded_locs, class_scores, max_overlap)
+                anchor_nms_idx, _ = diounms(class_decoded_locs.data, class_scores, max_overlap)
             else:
                 anchor_nms_idx = nms(class_decoded_locs, class_scores, max_overlap)
 
@@ -232,7 +232,7 @@ def detect_focal(predicted_locs, predicted_scores, min_score, max_overlap, top_k
         n_objects = image_scores.size(0)
 
         if config.final_nms:
-            final_nms_idx = nms(image_boxes, image_scores, 0.8)
+            final_nms_idx = nms(image_boxes, image_scores, 0.7)
             image_scores = image_scores[final_nms_idx]
             image_labels = image_labels[final_nms_idx]
             image_boxes = image_boxes[final_nms_idx, :]

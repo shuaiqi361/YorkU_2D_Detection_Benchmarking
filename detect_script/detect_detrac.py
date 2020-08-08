@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/keyi/Documents/research/code/shape_based_object_detection')
+sys.path.append('/media/keyi/Data/Research/traffic/detection/YorkU_2D_Detection_Benchmarking')
 from torchvision import transforms
 from PIL import Image
 import os
@@ -28,11 +28,11 @@ Arguments to be modified for testing DETRAC test video
 resize = transforms.Resize((540, 960))
 # resize = transforms.Resize((512, 512))
 
-root_path = '/home/keyi/Documents/research/code/shape_based_object_detection/experiment/ATSSSSD_traffic_002'
-folder_path = '/home/keyi/Documents/Data/DETRAC/Insight-MVT_Annotation_Test'
-model_path = os.path.join(root_path, 'snapshots/atssssd_traffic_checkpoint_epoch-7.pth.tar')
-config_path = ''
-meta_data_path = '/home/keyi/Documents/research/code/shape_based_object_detection/data/DETRAC_bin/label_map.json'
+root_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/experiment/RefineDet_traffic_003'
+folder_path = '/media/keyi/Data/Research/traffic/data/DETRAC/Insight-MVT_Annotation_Test'
+model_path = os.path.join(root_path, 'snapshots/refinedetboftraffic_detrac_checkpoint_epoch-30.pth.tar')
+config_path = os.path.join(root_path, 'config.yaml')
+meta_data_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/data/DETRAC_bin/label_map.json'
 output_path = os.path.join(root_path, 'detected_results')
 output_file_flag = True  # if save detection results flag
 output_video_flag = True

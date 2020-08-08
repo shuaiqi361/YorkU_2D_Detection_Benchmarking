@@ -1,6 +1,5 @@
 import sys
-
-sys.path.append('/home/keyi/Documents/research/code/shape_based_object_detection')
+sys.path.append('/media/keyi/Data/Research/traffic/detection/YorkU_2D_Detection_Benchmarking')
 from torchvision import transforms
 from PIL import Image
 import os
@@ -18,17 +17,18 @@ from detect_script.detect_tools import detect, detect_focal
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Transforms, should adjust accordingly
-input_size = (512, 512)
+# input_size = (512, 512)
 # input_size = (720, 1280)
 # resize = transforms.Resize(input_size)  # For traffic data
-resize = transforms.Resize(input_size)  # For COCO data
+# resize = transforms.Resize(input_size)  # For COCO data
 
 to_tensor = transforms.ToTensor()
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                  std=[0.229, 0.224, 0.225])
 
+
 def detect_folder(folder_path, model_path, meta_data_path, output_path, config_path,
-                  save_image_flag, final_nms):
+                  save_image_flag, save_bbox_flag, final_nms):
     """
     :param folder_path: folder that contains all the images to be detected
     :param model_path: path to the checkpoint
@@ -53,12 +53,7 @@ def detect_folder(folder_path, model_path, meta_data_path, output_path, config_p
     if not os.path.exists(output_path):
         os.mkdir(output_path)
 
-    output_video_file = os.path.join(output_path,
-                                     video_path.split('/')[-1].strip('.mkv').strip('.avi')
-                                     + '_detect.avi')
-    output_bbox_file = os.path.join(output_path,
-                                    video_path.split('/')[-1].strip('.mkv').strip('.jpg').strip('.png').strip('.avi')
-                                    + '_bbox.txt')
+    output_bbox_file = os.path.join(output_path, os.path.join(folder_path.split('/')[-1], 'image_detect_results.txt'))
 
     # load model
     checkpoint = torch.load(model_path, map_location=device)
@@ -108,17 +103,15 @@ def detect_folder(folder_path, model_path, meta_data_path, output_path, config_p
         # frame_name = 'img{:04d}.png'.format(frame_id + 1)
         frame_name = frame_list[frame_id]
         frame_path = os.path.join(folder_path, frame_name)
-        # print("Processing frame: ", frame_id, frame_path)
-        # frame = cv2.resize(cv2.imread(frame_path), dsize=(width, height))
         frame = cv2.imread(frame_path)
 
-        annotated_image, time_pframe, frame_info = detect_image(frame, model, 0.15, 0.65, 200,
+        annotated_image, time_pframe, frame_info = detect_image(frame, model, 0.2, 0.5, 100,
                                                                 rev_label_map, label_color_map, config)
         speed_list.append(time_pframe)
 
         if save_image_flag:
             # video_out.write(annotated_image)
-            cv2.imwrite(annotated_image, output_path + frame_name.strip('.png').strip('.jpg') + '_bbox.png')
+            cv2.imwrite(os.path.join(output_path, frame_name.strip('.png').strip('.jpg') + '_bbox.png'), annotated_image)
         if save_bbox_flag:
             f_out.write(frame_name + frame_info)
 
@@ -208,7 +201,7 @@ def detect_video(video_path, model_path, meta_data_path, output_path, config_pat
             print('Image processing and detecting done. ')
             break
 
-        annotated_image, time_pframe, frame_info = detect_image(frame, model, 0.05, 0.5, 200,
+        annotated_image, time_pframe, frame_info = detect_image(frame, model, 0.2, 0.5, 100,
                                                                 rev_label_map, label_color_map, config)
         speed_list.append(time_pframe)
 
@@ -290,19 +283,30 @@ def detect_single_image(image_path, model_path, meta_data_path, output_path, con
 
     frame = cv2.imread(image_path)
 
-    annotated_image, _, _ = detect_image(frame, model, 0.05, 0.5, 200,
+    annotated_image, _, _ = detect_image(frame, model, 0.2, 0.5, 100,
                                          rev_label_map, label_color_map, config)
 
     if save_image_flag:
-        cv2.imwrite(annotated_image, os.path.join(output_path, image_path.strip('.png').strip('jpg') + '_bbox.png'))
+        cv2.imwrite(os.path.join(output_path, image_path.strip('.png').strip('jpg') + '_bbox.png'), annotated_image)
 
     cv2.imshow('Image detect', annotated_image)
-    cv2.waitKey()
+    cv2.waitKey(1)
 
     print('Detected image saved to:', output_path)
 
 
 def detect_image(frame, model, min_score, max_overlap, top_k, reverse_label_map, label_color_map, config):
+    # Read out the resize dim from config file
+    if len(config.model['input_size']) == 2:
+        resize_dim = (config.model['input_size'][0], config.model['input_size'][1])
+    elif len(config.model['input_size']) == 1:
+        resize_dim = (config.model['input_size'][0], config.model['input_size'][0])
+    else:
+        print('The input size should be of length 1 or 2.')
+        raise IndexError
+
+    resize = transforms.Resize(resize_dim)
+
     # Transform
     image_for_detect = frame.copy()
     img = cv2.cvtColor(image_for_detect, cv2.COLOR_BGR2RGB)
@@ -413,39 +417,40 @@ if __name__ == '__main__':
         print_help()
         exit()
     if sys.argv[1] == '--video':
-        root_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/experiment/SSD512_exp_003'
-        video_path = '/media/keyi/Data/Research/traffic/data/Hwy7/20200224_153147_demo4.mkv'
-        model_path = os.path.join(root_path, 'snapshots/ssd512_traffic_checkpoint_epoch-3.pth.tar')
-        meta_data_path = '/media/keyi/Data/Research/traffic/detection/object_detection_2D/dataset/DETRAC/label_map.json'
+        root_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/experiment/RetinaNet_atss_001'
+        video_path = '/media/keyi/Data/Research/traffic/data/Transplan/GXAB0755_demo2.MP4'
+        model_path = os.path.join(root_path, 'snapshots/retinaatss50_coco_checkpoint_epoch-50.pth.tar')
+        meta_data_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/data/COCO/label_map.json'
         output_path = os.path.join(root_path, 'detected_results')
-        config_path = ''
+        config_path = os.path.join(root_path, 'config.yaml')
         save_image_flag = True
-        save_bbox_flag = True
+        save_bbox_flag = False
         final_nms = True
         detect_video(video_path, model_path, meta_data_path, output_path, config_path,
                      save_image_flag, save_bbox_flag, final_nms)
 
-    elif sys.argv[1] == '--folder':  # the folder should contain images from a video, named as "0001.jpg", "0002.jpg"...
-        root_path = '/home/keyi/Documents/research/code/shape_based_object_detection/experiment/RefineDet_traffic_003'
-        folder_path = '/home/keyi/Documents/Data/Hwy7/20200224_153147_d2_1200'
-        model_path = os.path.join(root_path, 'snapshots/refinedetboftraffic_detrac_checkpoint_epoch-10.pth.tar')
-        meta_data_path = '/home/keyi/Documents/research/code/shape_based_object_detection/data/DETRAC/label_map.json'
+    elif sys.argv[1] == '--folder':
+        root_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/experiment/RetinaNet_atss_001'
+        folder_path = '/media/keyi/Data/Research/traffic/data/COCO'
+        model_path = os.path.join(root_path, 'snapshots/retinaatss50_coco_checkpoint_epoch-50.pth.tar')
+        meta_data_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/data/COCO/label_map.json'
         output_path = os.path.join(root_path, 'detected_results')
-        config_path = ''
+        config_path = os.path.join(root_path, 'config.yaml')
         save_image_flag = True
-        save_bbox_flag = True
+        save_bbox_flag = False
         final_nms = True
         detect_folder(folder_path, model_path, meta_data_path, output_path, config_path,
                       save_image_flag, save_bbox_flag, final_nms)
 
     elif sys.argv[1] == '--image':  # the folder should contain images from a video, named as "0001.jpg", "0002.jpg"...
-        root_path = '/home/keyi/Documents/research/code/shape_based_object_detection/experiment/RefineDet_traffic_003'
-        image_path = '/home/keyi/Documents/Data/Hwy7/20200224_153147_d2_1200.jpg'
-        model_path = os.path.join(root_path, 'snapshots/refinedetboftraffic_detrac_checkpoint_epoch-10.pth.tar')
-        meta_data_path = '/home/keyi/Documents/research/code/shape_based_object_detection/data/DETRAC/label_map.json'
+        root_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/experiment/RetinaNet_atss_001'
+        image_path = '/media/keyi/Data/Research/traffic/data/COCO/000000009891.jpg'
+        model_path = os.path.join(root_path, 'snapshots/retinaatss50_coco_checkpoint_epoch-50.pth.tar')
+        meta_data_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/data/COCO/label_map.json'
         output_path = os.path.join(root_path, 'detected_results')
-        config_path = ''
+        config_path = os.path.join(root_path, 'config.yaml')
         save_image_flag = True
+        save_bbox_flag = False
         final_nms = True
         detect_single_image(image_path, model_path, meta_data_path, output_path, config_path,
                             save_image_flag, final_nms)

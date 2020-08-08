@@ -3,7 +3,8 @@ from .SSD_ATSS import ATSSSSD512, ATSSSSD512Loss
 from .NETNet import VGGNETNetDetector, VGGNETNetDetectorLoss
 from .RefineDet import RefineDet512, RefineDetLoss
 from .RetinaNet import resnet50, resnet101, RetinaFocalLoss
-from .RetinaNet_ATSS import RetinaATSSNetLoss, RetinaATSS50, RetinaATSS101
+from .RetinaATSS import RetinaATSSNetLoss, RetinaATSS50, RetinaATSS101
+from .RefineBOFTraffic import RefineDetBofTraffic, RefineDetBofTrafficLoss
 
 
 def model_entry(config):
@@ -31,6 +32,9 @@ def model_entry(config):
     elif config.model['arch'].upper() == 'NETNET':
         print('Loading NETNet with VGG16 backbone Detector ......')
         return VGGNETNetDetector(config['n_classes'], config=config), VGGNETNetDetectorLoss
+    elif config.model['arch'].upper() == 'REFINEDETBOFTRAFFIC':
+        print('Loading RefineDet with VGG-16 backbone, DETRAC finetune model ......')
+        return RefineDetBofTraffic(config['n_classes'], config=config), RefineDetBofTrafficLoss
     else:
         print('Models not implemented.')
         raise NotImplementedError
