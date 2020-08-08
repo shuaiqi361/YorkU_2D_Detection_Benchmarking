@@ -1,0 +1,11 @@
+data/*
+log/*
+checkpoints/*
+*.tar
+.idea/*
+__pycache__/*
+operators/__pycache__/*
+pycocotools/*
+dataset/__pycache__/*
+models/__pycache__/*
+detect_script/__pycache__/*
