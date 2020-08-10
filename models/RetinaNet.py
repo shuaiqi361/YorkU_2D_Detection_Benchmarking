@@ -216,7 +216,7 @@ class RetinaNet(nn.Module):
 
         self.fpn = PyramidFeatures(fpn_sizes[0], fpn_sizes[1], fpn_sizes[2], feature_size=256)
         self.regressionModel = RegressionModel(256, num_anchors=9)
-        self.classificationModel = ClassificationModel(256, num_anchors=9, num_classes=n_classes)
+        self.classificationModel = ClassificationModel(256, num_anchors=9, num_classes=self.n_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -396,7 +396,7 @@ class RetinaFocalLoss(nn.Module):
 
         # Identify priors that are positive (object/non-background)
         positive_priors = true_classes > 0
-        n_positives = positive_priors.sum(dim=1)  # (N)
+        n_positives = positive_priors.sum()  # (N)
 
         # LOCALIZATION LOSS
         loc_loss = self.smooth_l1(predicted_locs[positive_priors].view(-1, 4),

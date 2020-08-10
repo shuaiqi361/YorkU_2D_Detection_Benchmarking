@@ -181,9 +181,12 @@ if __name__ == '__main__':
             val2017
             ...
         - ...
-    
+
     """
-    coco_root_path = '/home/keyi/Documents/Data/COCO_17'
-    output_folder = '/home/keyi/Documents/research/code/shape_based_object_detection/data/COCO'
+    coco_root_path = '/home/lab2/keyi/data/COCO17'
+    output_folder = '/home/lab2/keyi/code/detection/YorkU_2D_Detection_Benchmarking/data/COCO'
+
+    if not os.path.exists(output_folder):
+        os.mkdir(output_folder)
 
     create_data_lists_coco17(coco_root_path, output_folder)

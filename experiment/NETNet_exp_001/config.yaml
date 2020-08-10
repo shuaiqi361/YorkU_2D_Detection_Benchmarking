@@ -17,11 +17,11 @@ nms:
   top_k: 500
 
 workers: 2
-batch_size: 6
+batch_size: 8
 reg_loss: IOU
 cls_loss: Focal
 focal_type: sigmoid
-reg_weights: 5
+reg_weights: 3
 
 optimizer:
   type: SGD
@@ -31,7 +31,7 @@ optimizer:
   warm_up_steps: 3
   warm_up_freq: 2000
 
-  max_iter: 1200000
+  max_iter: 1000000
   momentum: 0.9
   weight_decay: 0.0001
 
@@ -42,8 +42,8 @@ device: 0
 
 data_name: COCO
 
-train_data_root: /home/keyi/research/code/traffic/shape_based_object_detection/data/COCO
-val_data_root: /home/keyi/research/code/traffic/shape_based_object_detection/data/COCO
+train_data_root: /home/lab2/keyi/code/detection/YorkU_2D_Detection_Benchmarking/data/COCO
+val_data_root: /home/lab2/keyi/code/detection/YorkU_2D_Detection_Benchmarking/data/COCO
 
-label_path: /home/keyi/research/code/traffic/shape_based_object_detection/data/COCO/label_map.json
-annotation_file: /home/keyi/research/data/COCO17/annotations/instances_val2017.json
+label_path: /home/lab2/keyi/code/detection/YorkU_2D_Detection_Benchmarking/data/COCO/label_map.json
+annotation_file: /home/lab2/keyi/data/COCO17/annotations/instances_val2017.json

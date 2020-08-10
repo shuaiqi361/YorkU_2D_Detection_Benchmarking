@@ -14,13 +14,14 @@ class SigmoidFocalLoss(nn.Module):
         self.device = config.device
 
     def forward(self, out, target):
+        # print('In Loss: ', out.size(), target.size())
         n_class = out.shape[1]  # excluded background class when using Sigmoid Focal Loss, 80 for COCO
         class_ids = torch.arange(
             1, n_class + 1, dtype=target.dtype, device=target.device
         ).unsqueeze(0)
 
         t = target.unsqueeze(1)
-        p = torch.sigmoid(out).clamp(min=1e-5, max=1-1e-5)
+        p = torch.sigmoid(out).clamp(min=1e-6, max=1-1e-6)
 
         gamma = self.gamma
         alpha = self.alpha

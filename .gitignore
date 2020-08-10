@@ -9,3 +9,6 @@ pycocotools/*
 dataset/__pycache__/*
 models/__pycache__/*
 detect_script/__pycache__/*
+experiment/SSD_atss_001/logs/*
+experiment/SSD_atss_001/events/*
+experiment/SSD_atss_001/snapshots/*

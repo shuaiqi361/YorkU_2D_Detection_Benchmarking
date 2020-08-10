@@ -140,4 +140,7 @@ if __name__ == '__main__':
     voc12_path = '/home/keyi/research/data/VOC_2012/VOCdevkit/VOC2012'
     output_folder = '/home/keyi/research/code/traffic/shape_based_object_detection/data/VOC'
 
+    if not os.path.exists(output_folder):
+        os.mkdir(output_folder)
+
     create_data_lists(voc07_path, voc12_path, output_folder)

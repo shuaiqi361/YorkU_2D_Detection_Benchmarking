@@ -127,29 +127,29 @@ def main():
         train_dataset = COCO17Dataset(train_data_folder, split='train', config=config)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True,
                                                    collate_fn=train_dataset.collate_fn, num_workers=workers,
-                                                   pin_memory=True, drop_last=True)
+                                                   pin_memory=False, drop_last=True)
         test_dataset = COCO17Dataset(val_data_folder, split='val', config=config)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False,
                                                   collate_fn=test_dataset.collate_fn, num_workers=workers,
-                                                  pin_memory=True)
+                                                  pin_memory=False)
     elif config.data_name.upper() == 'VOC':
         train_dataset = PascalVOCDataset(train_data_folder, split='train', config=config)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True,
                                                    collate_fn=train_dataset.collate_fn, num_workers=workers,
-                                                   pin_memory=True, drop_last=True)
+                                                   pin_memory=False, drop_last=True)
         test_dataset = PascalVOCDataset(val_data_folder, split='val', config=config)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False,
                                                   collate_fn=test_dataset.collate_fn, num_workers=workers,
-                                                  pin_memory=True)
+                                                  pin_memory=False)
     elif config.data_name.upper() == 'DETRAC':
         train_dataset = DetracDataset(train_data_folder, split='train', config=config)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True,
                                                    collate_fn=train_dataset.collate_fn, num_workers=workers,
-                                                   pin_memory=True, drop_last=True)
+                                                   pin_memory=False, drop_last=True)
         test_dataset = DetracDataset(val_data_folder, split='val', config=config)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False,
                                                   collate_fn=test_dataset.collate_fn, num_workers=workers,
-                                                  pin_memory=True)
+                                                  pin_memory=False)
     else:
         print('The dataset is not available for training.')
         raise NotImplementedError
@@ -383,7 +383,7 @@ def evaluate(test_loader, model, optimizer, config):
 
     str_print = 'EVAL: Mean Average Precision {0:.4f}, ' \
                 'avg speed {1:.3f} Hz, lr {2:.6f}'.format(mAP, 1. / np.mean(detect_speed),
-                                                          config.scheduler.get_lr()[1])
+                                                          config.scheduler.get_last_lr()[1])
     config.logger.info(str_print)
 
     del predicted_locs, predicted_scores, boxes, labels, images, difficulties

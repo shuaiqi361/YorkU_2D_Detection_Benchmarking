@@ -255,4 +255,7 @@ if __name__ == '__main__':
     root_path = '/home/keyi/Documents/Data/DETRAC'
     output_folder = '/home/keyi/Documents/research/code/shape_based_object_detection/data/DETRAC'
 
+    if not os.path.exists(output_folder):
+        os.mkdir(output_folder)
+
     create_data_lists_detrac(root_path, output_folder)

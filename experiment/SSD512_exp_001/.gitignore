@@ -3,3 +3,4 @@ log/*
 snapshots/*
 live_results/*
 detected_results/*
+*.pth
