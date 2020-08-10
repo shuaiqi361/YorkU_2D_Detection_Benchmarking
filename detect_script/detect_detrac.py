@@ -1,5 +1,6 @@
 import sys
-sys.path.append('/media/keyi/Data/Research/traffic/detection/YorkU_2D_Detection_Benchmarking')
+
+sys.path.append('../../YorkU_2D_Detection_Benchmarking')
 from torchvision import transforms
 from PIL import Image
 import os
@@ -28,11 +29,11 @@ Arguments to be modified for testing DETRAC test video
 resize = transforms.Resize((540, 960))
 # resize = transforms.Resize((512, 512))
 
-root_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/experiment/RefineDet_traffic_003'
-folder_path = '/media/keyi/Data/Research/traffic/data/DETRAC/Insight-MVT_Annotation_Test'
+root_path = '/home/keyi/Documents/research/code/shape_based_object_detection/experiment/RefineDet_traffic_003'
+folder_path = '/home/keyi/Documents/Data/DETRAC/Insight-MVT_Annotation_Test'
 model_path = os.path.join(root_path, 'snapshots/refinedetboftraffic_detrac_checkpoint_epoch-30.pth.tar')
 config_path = os.path.join(root_path, 'config.yaml')
-meta_data_path = '/media/keyi/Data/Research/traffic/detection/shape_based_object_detection/data/DETRAC_bin/label_map.json'
+meta_data_path = '/home/keyi/Documents/research/code/shape_based_object_detection/data/DETRAC/label_map.json'
 output_path = os.path.join(root_path, 'detected_results')
 output_file_flag = True  # if save detection results flag
 output_video_flag = True
@@ -78,7 +79,7 @@ def detect_folder(folder_path, model_path, meta_data_path):
     fps = 30  # output video configuration
 
     folder_name = folder_path.split('/')[-1]
-    label_color_map = [(255, 0, 0), (0, 0, 255)]
+    # label_color_map = [(255, 0, 0), (0, 0, 255), (0, 255, 0), (100, 100, 0), (150, 0, 150)]
 
     if output_video_flag:
         video_out = cv2.VideoWriter(os.path.join(output_path, folder_name + '.mkv'),
@@ -98,8 +99,8 @@ def detect_folder(folder_path, model_path, meta_data_path):
         # print("Processing frame: ", frame_id, frame_path)
         frame = cv2.imread(frame_path)
 
-        annotated_image, time_pframe, frame_info_list = detect_image(frame, model, 0.15, 0.65, 200,
-                                                                rev_label_map, label_color_map, config)
+        annotated_image, time_pframe, frame_info_list = detect_image(frame, model, 0.45, 0.45, 100,
+                                                                     rev_label_map, config)
 
         speed_list.append(time_pframe)
 
@@ -121,7 +122,7 @@ def detect_folder(folder_path, model_path, meta_data_path):
     print('Video configuration: \nresolution:{}x{}, fps:{}'.format(width, height, fps))
 
 
-def detect_image(frame, model, min_score, max_overlap, top_k, reverse_label_map, label_color_map, config):
+def detect_image(frame, model, min_score, max_overlap, top_k, reverse_label_map, config):
     # Transform
     image_for_detect = frame.copy()
     img = cv2.cvtColor(image_for_detect, cv2.COLOR_BGR2RGB)
