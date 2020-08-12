@@ -70,11 +70,11 @@ sh eval.sh
 
 If you want to evaluate a model and show the detection results, you can run the [detect\_script/detect_bbox.py](https://github.com/shuaiqi361/YorkU_2D_Detection_Benchmarking/blob/master/detect_script/detect_bbox.py), this file can accept single image, a folder of images, and video as input, specify the paths of saved checkpoints in the main() function, and the output images and text files containing bboxes and labels will be saved under detect_results. Specify pathes and then,
 ```
-python detect\_bbox.py --image/--video/--folder
+python detect_bbox.py --image/--video/--folder
 ```
 
 If you try to evaluate on DETRAC traffic dataset and generate the output format for online evaluation on their website, you can run [detect\_script/detect_detrac.py](https://github.com/shuaiqi361/YorkU_2D_Detection_Benchmarking/blob/master/detect_script/detect_detrac.py). The checkpoint is available [here](https://drive.google.com/file/d/1JleKAvcMtsJPT1hopABEgWg8jV9NMEwC/view?usp=sharing).
 ```
-python detect\_detrac.py
+python detect_detrac.py
 ```
 
