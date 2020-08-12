@@ -24,12 +24,18 @@ focal_type: sigmoid
 reg_weights: 3
 
 optimizer:
-  type: SGD
-  base_lr: 0.0004
+  type: adam
+  base_lr: 0.001
+  lr_step: [70, 90]
   min_lr: 0.000001
+  lr_decay: 0.1
   warm_up: False
   warm_up_steps: 3
   warm_up_freq: 2000
+
+  max_iter: 1100000
+  momentum: 0.9
+  weight_decay: 0.0001
 
   max_iter: 800000
   momentum: 0.9

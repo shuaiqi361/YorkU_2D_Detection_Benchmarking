@@ -118,7 +118,7 @@ def main():
                                         lr=lr, momentum=momentum, weight_decay=weight_decay)
         elif config.optimizer['type'].upper() == 'ADAM':
             optimizer = torch.optim.Adam(params=[{'params': biases, 'lr': 2 * lr}, {'params': not_biases}],
-                                         lr=lr, momentum=momentum, weight_decay=weight_decay)
+                                         lr=lr, weight_decay=weight_decay)
         else:
             raise NotImplementedError
 
