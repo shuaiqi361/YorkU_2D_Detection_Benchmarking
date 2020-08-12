@@ -24,9 +24,11 @@ focal_type: softmax
 reg_weights: 1
 
 optimizer:
-  type: SGD
-  base_lr: 0.0005
+  type: adam
+  base_lr: 0.001
+  lr_step: [50, 60]
   min_lr: 0.000001
+  lr_decay: 0.1
   warm_up: False
   warm_up_steps: 3
   warm_up_freq: 2000

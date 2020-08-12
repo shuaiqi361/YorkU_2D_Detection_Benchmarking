@@ -190,7 +190,9 @@ def main():
 
     # Epochs
     best_mAP = -1.
-    config.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, config.optimizer['min_lr'])
+    # config.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, config.optimizer['min_lr'])
+    config.scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, config.optimizer['lr_step'],
+                                                            gamma=config.optimizer['lr_decay'])
 
     for epoch in range(start_epoch, epochs):
         config.tb_logger.add_scalar('learning_rate', epoch)
@@ -203,7 +205,7 @@ def main():
               optimizer=optimizer,
               epoch=epoch, config=config)
 
-        config.scheduler.step()
+        config.scheduler.step(epoch + 1)
 
         # Save checkpoint
         if (epoch > 0 and epoch % val_freq == 0) or epoch == 1:
