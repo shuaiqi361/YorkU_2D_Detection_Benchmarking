@@ -205,7 +205,7 @@ def main():
               optimizer=optimizer,
               epoch=epoch, config=config)
 
-        config.scheduler.step(epoch + 1)
+        config.scheduler.step()
 
         # Save checkpoint
         if (epoch > 0 and epoch % val_freq == 0) or epoch == 1:
