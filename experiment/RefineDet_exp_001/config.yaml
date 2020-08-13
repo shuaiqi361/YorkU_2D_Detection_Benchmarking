@@ -24,7 +24,7 @@ focal_type: softmax
 reg_weights: 1
 
 optimizer:
-  type: adam
+  type: SGD
   base_lr: 0.001
   lr_step: [80, 110]
   min_lr: 0.000001

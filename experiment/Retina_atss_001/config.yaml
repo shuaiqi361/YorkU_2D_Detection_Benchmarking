@@ -21,11 +21,11 @@ batch_size: 16
 reg_loss: IOU
 cls_loss: Focal
 focal_type: sigmoid
-reg_weights: 3
+reg_weights: 4.5
 
 optimizer:
   type: adam
-  base_lr: 0.001
+  base_lr: 0.0005
   lr_step: [70, 90]
   min_lr: 0.000001
   lr_decay: 0.1
