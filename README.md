@@ -1,5 +1,5 @@
 # YorkU_2D_Detection_Benchmarking
-This is the Repository for benchmarking some of the representative one-stage 2D object detection frameworks. These chosen frameworks may not rank the top on COCO leaderboard now, but they were recognized as key innovations in their time.
+This is the Repository for benchmarking some of the representative one-stage 2D object detection frameworks. These chosen frameworks may not rank the top on COCO leaderboard now, but they were recognized as key innovations in their time. In this Repo, you will find the code to train and evaluate these models, you will also be able to download the checkpoints trained by us on benchmark datasets.
 
 ## Introduction
 
@@ -11,6 +11,8 @@ By using this Repo, you will be able to train and evaluate object detection fram
 - [NETNet](https://arxiv.org/abs/2001.06690)
 
 This Repo is self-standing without the need of compiling any other sources, and it offers a unified pipeline to train and evaluate these models. In order to have a fair comparison among these baselines, the version in this Repo may be different from the original published paper, for example, all input images are resized to have the same size 512-by-512, all the output bounding boxes are percentage regarding the input image, only the VGG16 and ResNet50 are available for backbones, multi-GPU training is currently not supported, and etc. Therefore, you may find that the final mAP doesn't match the published results.
+
+In addition, the trained models are saved and released for evaluation. Given the settings, the current best model on COCO and DETRAC dataset is RefineDet, you can download the saved checkpoints of this model in the last section of this Repo.
 
 
 ## Environment Setup
