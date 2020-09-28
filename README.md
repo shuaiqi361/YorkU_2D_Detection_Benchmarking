@@ -79,4 +79,4 @@ If you try to evaluate on DETRAC traffic dataset and generate the output format 
 ```
 python detect_detrac.py
 ```
-
+If you want to evaluate the output files locally, you will need to download their evaluation code [online](http://detrac-db.rit.albany.edu/download)
