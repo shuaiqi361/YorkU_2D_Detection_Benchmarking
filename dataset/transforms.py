@@ -335,11 +335,11 @@ def transform(image, boxes, labels, split, config):
 
             # Expand image (zoom out) with a 50% chance - helpful for training detection of small objects
             # Fill surrounding space with the mean of ImageNet data that our base VGG was trained on
-            if random.random() < 0.2 and 'expand' in operation_list:
+            if random.random() < 0.5 and 'expand' in operation_list:
                 new_image, new_boxes = expand(new_image, boxes, filler=mean)
 
             # Randomly crop image (zoom in)
-            if random.random() < 0.2 and 'random_crop' in operation_list:
+            if random.random() < 0.5 and 'random_crop' in operation_list:
                 new_image, new_boxes, new_labels = random_crop(new_image, new_boxes, new_labels)
 
             # Convert Torch tensor to PIL image

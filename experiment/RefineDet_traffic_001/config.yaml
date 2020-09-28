@@ -1,0 +1,51 @@
+model:
+  arch: REFINEDETBOFTraffic
+  input_size: [540, 960]
+  test_size: [540, 960]
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+  mixup_beta: 1.5
+  operation_list: flip
+                  random_crop
+                  expand
+
+  box_type: corner
+  return_percent_coords: True
+
+nms:
+  min_score: 0.05
+  max_overlap: 0.45
+  top_k: 200
+
+workers: 2
+batch_size: 10
+reg_loss: DIOU
+cls_loss: cross_entropy
+focal_type: softmax
+reg_weights: 5.0
+
+
+optimizer:
+  type: SGD
+  base_lr: 0.0005
+  min_lr: 0.000001
+  warm_up: True
+  warm_up_steps: 4
+  warm_up_freq: 2000
+  decay_lr: 0.1
+  max_iter: 100000
+  momentum: 0.9
+  weight_decay: 0.0001
+
+print_freq: 2000
+val_freq: 10
+eval_overlap: 0.7
+device: 0
+
+data_name: DETRAC
+
+train_data_root: /home/keyi/Documents/research/code/shape_based_object_detection/data/DETRAC_bin
+
+val_data_root: /home/keyi/Documents/research/code/shape_based_object_detection/data/DETRAC_bin
+
+label_path: /home/keyi/Documents/research/code/shape_based_object_detection/data/DETRAC_bin/label_map.json
