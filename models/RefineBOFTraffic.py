@@ -895,11 +895,6 @@ class RefineDetBofTrafficLoss(nn.Module):
 
             # Store
             true_classes[i] = label_for_each_prior
-
-            # Encode center-size object coordinates into the form we regressed predicted boxes to
-            # true_locs_encoded[i] = cxcy_to_gcxgcy(xy_to_cxcy(boxes[i][object_for_each_prior]),
-            #                                       xy_to_cxcy(decoded_arm_locs[i]))
-            # true_locs_encoded[i] = cxcy_to_gcxgcy(xy_to_cxcy(boxes[i][object_for_each_prior]), self.priors_cxcy)
             true_locs[i] = boxes[i][object_for_each_prior]
             # print(odm_locs.size(), decoded_arm_locs.size())
             decoded_odm_locs[i] = cxcy_to_xy(gcxgcy_to_cxcy(odm_locs[i], xy_to_cxcy(decoded_arm_locs[i])))
@@ -959,7 +954,7 @@ class RefineDetBofTrafficLoss(nn.Module):
         :return:
         """
         arm_loss = self.compute_arm_loss(arm_locs, arm_scores, boxes, labels)
-        odm_loss = self.compute_odm_loss(arm_locs.data.detach(), arm_scores.data.detach(), odm_locs, odm_scores, boxes,
+        odm_loss = self.compute_odm_loss(arm_locs.detach(), arm_scores.detach(), odm_locs, odm_scores, boxes,
                                          labels)
 
         # TOTAL LOSS

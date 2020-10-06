@@ -1,3 +1,8 @@
+'''
+The implementation of the Deformable Convolution v2 comes from
+https://github.com/4uiiurz1/pytorch-deform-conv-v2/blob/master/deform_conv_v2.py
+'''
+
 import torch
 from torch import nn
 

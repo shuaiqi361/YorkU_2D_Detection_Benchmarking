@@ -1,3 +1,9 @@
+'''
+The implementation if DIoU/CIoU loss come from
+https://github.com/Zzh-tju/DIoU
+These loss functions are designed to be a faster and better bounding box regressor for detection
+'''
+
 import torch
 import math
 

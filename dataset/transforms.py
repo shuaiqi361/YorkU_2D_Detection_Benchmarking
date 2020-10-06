@@ -1,3 +1,10 @@
+'''
+These image transformation and augmentation functions are implemented by the author of
+https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Object-Detection
+These functions are in consistent with the original SSD paper
+https://arxiv.org/abs/1512.02325
+'''
+
 import torch
 import random
 import torchvision.transforms.functional as FT

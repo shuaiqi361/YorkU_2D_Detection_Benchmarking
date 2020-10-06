@@ -1,3 +1,10 @@
+'''
+This code originally comes from this Repo
+https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Object-Detection
+This is a great tutorial for 2D object detection SSD
+'''
+
+
 from torch import nn
 import torch.nn.functional as F
 from math import sqrt
